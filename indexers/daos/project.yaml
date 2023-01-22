@@ -1,0 +1,56 @@
+specVersion: 1.0.0
+name: dao-dao-daos
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: ">=0.1.0"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  Indexes DAOs. Used to support the DAO DAO search and provide a public API for
+  listing DAOs.
+repository: https://github.com/DA0-DA0/subquery-indexers
+schema:
+  file: ./schema.graphql
+
+network:
+  chainId: athena-3
+  # chainId: uni-5 # testnet
+
+  endpoint: https://rpc-terp.zenchainlabs.io/ # mainnet 2578099 to 4136530
+  # endpoint: https://rpc-archive.junonetwork.io:443/ # mainnet 4136532 to current
+  # endpoint: https://rpc.uni.juno.deuslabs.fi:443/ # testnet
+
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 1 # mainnet v1
+    # startBlock: 4136532 # mainnet second fork
+    # startBlock: 1 # testnet
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleInstantiate
+          kind: cosmos/MessageHandler
+          filter:
+            type: "/cosmwasm.wasm.v1.MsgInstantiateContract"
+        - handler: handleInstantiateFactory
+          kind: cosmos/MessageHandler
+          filter:
+            type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+            contractCall: "instantiate_contract_with_self_admin"
+        - handler: handleUpdateConfigEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: "wasm"
+            attributes:
+              action: "execute_update_config"
+        - handler: handleUpdateAdminEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: "wasm"
+            attributes:
+              action: "execute_accept_admin_nomination"

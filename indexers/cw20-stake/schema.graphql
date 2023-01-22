@@ -1,0 +1,17 @@
+# Stores staked balances per block height, per staking contract, per
+# address.
+type Snapshot @entity {
+  id: ID! # sender:contract:blockheight
+  addr: String! @index
+  contract: String! @index
+  blockHeight: BigInt! @index
+  amount: BigInt!
+}
+
+# Stores staked balances per staking contract, per address.
+type Balance @entity {
+  id: ID! # addr:contract
+  addr: String! @index
+  contract: String! @index
+  amount: BigInt!
+}

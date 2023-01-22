@@ -1,0 +1,12 @@
+{
+  "versions": [
+    {
+      "port": "3000",
+      "chainId": "athena-3",
+      "rpc": "https://rpc-terp.zenchainlabs.io/",
+      "startBlock": "1",
+      "label": "testnet",
+      "backupSuffix": "_testnet"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+# Stores staked balances per block height, per staking contract address.
+type Snapshot @entity {
+  id: ID! # contract:blockheight
+  contract: String! @index
+  blockHeight: BigInt! @index
+
+  token1Amount: BigInt!
+  token2Amount: BigInt!
+}
+
+# Stores staked balances per staking contract address.
+type Pool @entity {
+  id: ID! # contract
+  contract: String! @index
+
+  token1Amount: BigInt!
+  token2Amount: BigInt!
+}

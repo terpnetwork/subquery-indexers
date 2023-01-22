@@ -1,0 +1,31 @@
+type ProposalModule @entity {
+  id: ID!
+  proposals: [Proposal] @derivedFrom(field: "module")
+}
+
+type Proposal @entity {
+  id: ID!
+  module: ProposalModule!
+  num: Int!
+  open: Boolean!
+  proposer: Wallet
+  createdAt: Date! @index
+  completedAt: Date @index
+  executedAt: Date @index
+  closedAt: Date @index
+  expiresAtDate: Date @index
+  expiresAtHeight: Int @index
+  votes: [ProposalVote] @derivedFrom(field: "proposal")
+}
+
+type Wallet @entity {
+  id: ID!
+}
+
+type ProposalVote @entity {
+  id: ID!
+  proposal: Proposal!
+  wallet: Wallet!
+  votedAt: Date!
+  vote: String!
+}
